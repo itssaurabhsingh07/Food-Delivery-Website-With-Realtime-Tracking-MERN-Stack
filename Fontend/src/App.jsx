@@ -1,0 +1,54 @@
+import React from 'react'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import SignIn from './pages/signin'
+import SignUp from './pages/signup'
+import ForgotPassword from './pages/ForgotPassword'
+import useGetCurrentUser from './hooks/useGetCurrentUser'
+import { useSelector } from 'react-redux'
+import Home from './pages/Home'
+import useGetcity from './hooks/useGetcity'
+import useGetMyshop from './hooks/useGetMyShop'
+import CreateEditShop from './pages/CreateEditShop'
+import AddItem from './pages/AddItem'
+import EditItem from './pages/EditItem'
+import useGetShopByCity from './hooks/useGetShopByCity'
+import useGetItemsByCity from './hooks/useGetItemsByCity'
+import CartPage from './pages/CartPage'
+import CheckOut from './pages/CheckOut'
+import OrderPlaced from './pages/OrderPlaced'
+import MyOrders from './pages/MyOrders'
+import useGetMyOrders from './hooks/useGetMyOrders'
+import useUpdateLocation from './hooks/useUpdateLocation'
+import TrackOrderPage from './pages/TrackOrderPage'
+export const serverUrl = "http://localhost:8000"
+const App = () => {
+  useGetCurrentUser()
+  useUpdateLocation()
+  useGetcity()
+  useGetMyshop()
+  useGetShopByCity()
+  useGetItemsByCity()
+  useGetMyOrders()
+  const { userData } = useSelector(state => state.user)
+  return (
+    <Routes>
+      <Route path='/signin' element={!userData ? <SignIn /> : <Navigate to={"/"} />} />
+      <Route path='/signup' element={!userData ? <SignUp /> : <Navigate to={"/"} />} />
+      <Route path='/forgot-passwaord' element={!userData ? <ForgotPassword /> : <Navigate to={"/"} />} />
+      <Route path='/' element={userData ? <Home /> : <Navigate to={"/signin"} />} />
+      <Route path='/create-edit-shop' element={userData ? <CreateEditShop /> : <Navigate to={"/signin"} />} />
+      <Route path='/add-item' element={userData ? <AddItem /> : <Navigate to={"/signin"} />} />
+      <Route path='/edit-item/:itemId' element={userData ? <EditItem /> : <Navigate to={"/signin"} />} />
+      <Route path='/cart' element={userData ? <CartPage /> : <Navigate to={"/signin"} />} />
+      <Route path='/checkout' element={userData ? <CheckOut /> : <Navigate to={"/signin"} />} />
+      <Route path='/order-placed' element={userData ? <OrderPlaced /> : <Navigate to={"/signin"} />} />
+      <Route path='/my-orders' element={userData ? <MyOrders /> : <Navigate to={"/signin"} />} />
+      <Route path='/track-order/:orderId' element={userData ? <TrackOrderPage /> : <Navigate to={"/signin"} />} />
+
+
+    </Routes>
+
+  )
+}
+
+export default App
